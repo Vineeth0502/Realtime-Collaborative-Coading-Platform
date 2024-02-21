@@ -94,11 +94,18 @@ const EditorPage = () => {
         <div className="mainWrap">
             <div className="aside" style={{backgroundColor: "#070f2b"}}>
                 <div className="asideInner" >
-                    <div className="logo">
+                    <div className="logo" style={{display: "flex"}}>
                         <img
                             className="logoImage"
-                            src="/code-sync.png"
+                            src="/logo-icon.png"
                             alt="logo"
+                            style={{height: "50px", width: "50px", marginLeft: "-4px"}}
+                        />
+                        <img
+                            className="logoImage"
+                            src="/codetogether.png"
+                            alt="logo"
+                            style={{height: "47px", width: "142px"}}
                         />
                     </div>
                     <h3>Connected</h3>

@@ -4,14 +4,15 @@
   align-items: center;
   justify-content: center;
   color: #fff;
+  justify-content: space-between;
 }
 
-.formWrapper{
+.formWrapper{ 
   background:#2f3039;
   padding: 20px;
-  border-radius: 10px;
   width: 400px;
   max-width: 90%;
+  height: 100vh;
 }
 
 footer{
@@ -34,7 +35,7 @@ footer a{
 }
 
 .homePageLogo{
-  height: 80px;
+  height: 60px;
   margin-bottom: 30px;
 }
 
@@ -43,7 +44,7 @@ footer a{
   border-radius: 5px;
   outline: none;
   border: none;
-  margin-bottom: 14px;
+  margin-bottom: 20px;
   background: #eee;
   font-size: 16px;
   font-weight: bold;
@@ -141,4 +142,15 @@ footer a{
   font-size: 20px;
   line-height: 1.6;
   padding-top: 20px;
+}
+
+.logo_contain{
+  height: 100vh;
+  justify-content: center;
+}
+
+.rubik-glitch{
+  font-family: "Rubik Glitch Pop", system-ui;
+  font-weight: 400;
+  font-style: normal;
 }

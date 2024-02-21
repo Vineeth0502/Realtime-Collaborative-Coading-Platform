@@ -37,8 +37,11 @@ const Home = () => {
 
   return(
    <div className="homePageWrapper" style={{backgroundColor: "#070f2b"}}>
-    <div className="formWrapper" style={{backgroundColor: "#1b1a55"}}>
-        <img className="homePageLogo" src="/code-sync.png" alt="code-sync-logo"></img>
+    <h2 className= "rubik-glitch" style={{position:"absolute",top:"0px",left:"360px", fontSize: "36px"}}>CN PROJECT</h2>
+    <img className='logo_contain' src='/work-together.jpg' style={{width: "850px"}}></img>
+    <div className="formWrapper" style={{backgroundColor: "#1b1a55",height: "510px"}}>
+        <img className="homePageLogo" src="/logo-icon.png" style={{marginTop: "90px"}}></img>
+        <img className="homePageLogo" src="/codetogether.png"></img>
         <h4 className="mainLabel">Paste invitaiton ROOM ID</h4>
         <div className="inputGroup">
           <input 
@@ -57,7 +60,7 @@ const Home = () => {
            value={username}
            onKeyUp={handleInputEnter}
           />
-          <buton className="btn joinBtn" onClick={joinRoom}>Join</buton>
+          <buton className="btn joinBtn" onClick={joinRoom} style={{  width: "215px", marginLeft: "90px"}}>Join</buton>
           <span className="createInfo">
             If you don't have an invite then create &nbsp;
             <a onClick={createNewRoom} href="" className="createNewBtn">
@@ -66,9 +69,6 @@ const Home = () => {
           </span>
         </div>
     </div>
-    <footer>
-      <h4>Done by GROUP-2 ❤️</h4>
-    </footer>
   </div>
   );
 };
