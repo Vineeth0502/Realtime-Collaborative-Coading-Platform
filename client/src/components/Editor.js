@@ -1,20 +1,21 @@
-import React, { useEffect, useRef } from 'react';
-import Codemirror from 'codemirror';
+import React, { useEffect, useRef, useState } from 'react';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/addon/edit/closetag';
-import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/mode/htmlmixed/htmlmixed'; // Import HTML mixed mode
+import CodeMirror from 'codemirror'; // Import CodeMirror
 import ACTIONS from '../Actions';
 
 const Editor = ({ socketRef, roomId, onCodeChange }) => {
     const editorRef = useRef(null);
+    const outputRef = useRef(null);
+    const [outputContent, setOutputContent] = useState('');
+
     useEffect(() => {
-        async function init() {
-            editorRef.current = Codemirror.fromTextArea(
+        const initEditor = () => {
+            editorRef.current = CodeMirror.fromTextArea(
                 document.getElementById('realtimeEditor'),
                 {
-                    mode: { name: 'javascript', json: true },
+                    mode: 'htmlmixed',
                     theme: 'dracula',
                     autoCloseTags: true,
                     autoCloseBrackets: true,
@@ -26,15 +27,15 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
                 const { origin } = changes;
                 const code = instance.getValue();
                 onCodeChange(code);
-                if (origin !== 'setValue') {
+                if (origin !== 'setValue' && socketRef.current) {
                     socketRef.current.emit(ACTIONS.CODE_CHANGE, {
                         roomId,
                         code,
                     });
                 }
             });
-        }
-        init();
+        };
+        initEditor();
     }, []);
 
     useEffect(() => {
@@ -51,7 +52,35 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
         };
     }, [socketRef.current]);
 
-    return <textarea id="realtimeEditor"></textarea>;
+    const handleRunCode = () => {
+        const codeToExecute = editorRef.current.getValue();
+
+        try {
+            const frame = document.createElement('iframe');
+            frame.style.width = '100%';
+            frame.style.height = '100%';
+            frame.style.border = 'none';
+            outputRef.current.innerHTML = '';
+            outputRef.current.appendChild(frame);
+
+            const frameDoc = frame.contentDocument || frame.contentWindow.document;
+            frameDoc.open();
+            frameDoc.write(codeToExecute);
+            frameDoc.close();
+        } catch (error) {
+            setOutputContent(`Error: ${error.message}`);
+        }
+    };
+
+    return (
+        <div>
+            <div>
+                <button onClick={handleRunCode}>Run Code</button>
+            </div>
+            <textarea id="realtimeEditor"></textarea>
+            <div ref={outputRef} style={{ backgroundColor: '#f0f0f0', color: '#333', padding: '10px', minHeight: '100px', maxHeight: '200px', overflowY: 'auto' }}></div>
+        </div>
+    );
 };
 
 export default Editor;
