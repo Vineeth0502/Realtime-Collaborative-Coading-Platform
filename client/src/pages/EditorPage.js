@@ -1,5 +1,6 @@
+#added toaster component for notifications
 import React, { useState, useRef, useEffect } from 'react';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import ACTIONS from '../Actions';
 import Client from '../components/Client';
 import Editor from '../components/Editor';
@@ -7,7 +8,6 @@ import { initSocket } from '../socket';
 import {
     useLocation,
     useNavigate,
-    Navigate,
     useParams,
 } from 'react-router-dom';
 
@@ -92,6 +92,7 @@ const EditorPage = () => {
 
     return (
         <div className="mainWrap">
+            <Toaster />
             <div className="aside" style={{backgroundColor: "#070f2b"}}>
                 <div className="asideInner" >
                     <div className="logo" style={{display: "flex"}}>
@@ -129,7 +130,6 @@ const EditorPage = () => {
                 <Editor
                     socketRef={socketRef}
                     roomId={roomId}
-                    style={{backgroundColor: "red"}}
                     onCodeChange={(code) => {
                         codeRef.current = code;
                     }}
