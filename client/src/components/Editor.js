@@ -75,10 +75,45 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
     return (
         <div>
             <div>
-                <button onClick={handleRunCode}>Run Code</button>
+                <button 
+                    onClick={handleRunCode} 
+                    style={{ 
+                        backgroundColor: '#4CAF50', 
+                        border: 'none',
+                        color: 'white',
+                        padding: '10px 20px',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                    }}
+                >
+                    Run Code
+                </button>
             </div>
-            <textarea id="realtimeEditor"></textarea>
-            <div ref={outputRef} style={{ backgroundColor: '#f0f0f0', color: '#333', padding: '10px', minHeight: '100px', maxHeight: '200px', overflowY: 'auto' }}></div>
+            <textarea 
+                id="realtimeEditor" 
+                style={{ 
+                    width: '100%', 
+                    minHeight: '200px', 
+                    border: '1px solid #ccc', 
+                    borderRadius: '4px', 
+                    padding: '10px',
+                    boxSizing: 'border-box',
+                    marginTop: '10px',
+                }}
+            ></textarea>
+            <div 
+                ref={outputRef} 
+                style={{ 
+                    backgroundColor: '#f0f0f0', 
+                    color: '#333', 
+                    padding: '10px', 
+                    minHeight: '100px', 
+                    maxHeight: '200px', 
+                    overflowY: 'auto',
+                    borderRadius: '4px',
+                    marginTop: '10px',
+                }}
+            ></div>
         </div>
     );
 };
