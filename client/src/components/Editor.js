@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
 import 'codemirror/mode/htmlmixed/htmlmixed'; 
+import 'codemirror/mode/clike/clike';
+import 'codemirror/mode/python/python';
 import CodeMirror from 'codemirror';
 import ACTIONS from '../Actions';
 
@@ -11,13 +13,21 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
     const [outputContent, setOutputContent] = useState('');
     const [logs, setLogs] = useState([]);
     const [isLogsModalOpen, setIsLogsModalOpen] = useState(false);
+    const [language, setLanguage] = useState('javascript');
 
     useEffect(() => {
+        if (editorRef.current) {
+            editorRef.current.toTextArea();
+            editorRef.current = null;
+        }
         const initEditor = () => {
             editorRef.current = CodeMirror.fromTextArea(
                 document.getElementById('realtimeEditor'),
                 {
-                    mode: 'htmlmixed',
+                    mode: {
+                        name: getMode(language),
+                        json: true
+                    },
                     theme: 'dracula',
                     autoCloseTags: true,
                     autoCloseBrackets: true,
@@ -38,7 +48,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
             });
         };
         initEditor();
-    }, []);
+    }, [language]);
 
     useEffect(() => {
         if (socketRef.current) {
@@ -67,28 +77,36 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
 
     const handleRunCode = () => {
         const codeToExecute = editorRef.current.getValue();
+        let output;
 
         try {
-            const frame = document.createElement('iframe');
-            frame.style.width = '100%';
-            frame.style.height = '100%';
-            frame.style.border = 'none';
-            outputRef.current.innerHTML = '';
-            outputRef.current.appendChild(frame);
-
-            const frameDoc = frame.contentDocument || frame.contentWindow.document;
-            frameDoc.open();
-            frameDoc.write(codeToExecute);
-            frameDoc.close();
-            logExecution(codeToExecute);
+            switch (language) {
+                case 'javascript':
+                    output = executeJavaScript(codeToExecute);
+                    break;
+                case 'c':
+                    output = executeC(codeToExecute);
+                    break;
+                case 'java':
+                    output = executeJava(codeToExecute);
+                    break;
+                case 'python':
+                    output = executePython(codeToExecute);
+                    break;
+                default:
+                    output = 'Unsupported language';
+            }
         } catch (error) {
-            setOutputContent(`Error: ${error.message}`);
+            output = `Error: ${error.message}`;
         }
+
+        setOutputContent(output);
+        logExecution(codeToExecute, output);
     };
 
-    const logExecution = (code) => {
+    const logExecution = (code, output) => {
         const timestamp = new Date().toLocaleString();
-        const logEntry = { timestamp, code };
+        const logEntry = { timestamp, code, output };
         setLogs((prevLogs) => [...prevLogs, logEntry]);
     };
 
@@ -107,6 +125,81 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
         setIsLogsModalOpen((prev) => !prev);
     };
 
+    const getMode = (language) => {
+        switch (language) {
+            case 'javascript':
+                return 'javascript';
+            case 'c':
+                return 'text/x-csrc';
+            case 'java':
+                return 'text/x-java';
+            case 'python':
+                return 'python';
+            default:
+                return 'javascript';
+        }
+    };
+
+    const executeJavaScript = (code) => {
+        try {
+            // Create a new iframe element
+            const frame = document.createElement('iframe');
+            frame.style.width = '100%';
+            frame.style.height = '100%';
+            frame.style.border = 'none';
+    
+            // Append the iframe to the outputRef element
+            outputRef.current.innerHTML = '';
+            outputRef.current.appendChild(frame);
+    
+            // Get the document object of the iframe
+            const frameDoc = frame.contentDocument || frame.contentWindow.document;
+    
+            // Write the code into the iframe document
+            frameDoc.open();
+            frameDoc.write(code);
+            frameDoc.close();
+    
+            // Set the output content
+            setOutputContent('Code executed successfully');
+    
+        } catch (error) {
+            // Set the error message as output content
+            setOutputContent(`Error executing code: ${error.message}`);
+        }
+    };
+
+    const executeC = (code) => {
+        try {
+            // Simulate compilation and execution of C code
+            const compiledOutput = `Compiled and executed C code:\n${code}`;
+            setOutputContent(compiledOutput);
+        } catch (error) {
+            setOutputContent(`Error executing C code: ${error.message}`);
+        }
+    };
+    
+    const executeJava = (code) => {
+        try {
+            // Simulate compilation and execution of Java code
+            const compiledOutput = `Compiled and executed Java code:\n${code}`;
+            setOutputContent(compiledOutput);
+        } catch (error) {
+            setOutputContent(`Error executing Java code: ${error.message}`);
+        }
+    };
+    
+    const executePython = (code) => {
+        try {
+            // Simulate execution of Python code
+            const executedOutput = `Executed Python code:\n${code}`;
+            setOutputContent(executedOutput);
+        } catch (error) {
+            setOutputContent(`Error executing Python code: ${error.message}`);
+        }
+    };
+    
+
     return (
         <div style={{ padding: '10px', backgroundColor: '#f0f0f0', color: '#333', height: '100%', overflowY: 'auto' }}>
             {isLogsModalOpen && (
@@ -120,7 +213,9 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
                                 <li key={index}>
                                     <div>{log.timestamp}</div>
                                     <pre>{log.code}</pre>
-                                    <button onClick={() => copyToClipboard(log.code)}>Copy</button>
+                                    <pre>{log.output}</pre>
+                                    <button onClick={() => copyToClipboard(log.code)}>Copy Code</button>
+                                    <button onClick={() => copyToClipboard(log.output)}>Copy Output</button>
                                 </li>
                             ))}
                         </ul>
@@ -130,9 +225,15 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
             <div>
                 <button onClick={handleRunCode}>Run Code</button>
                 <button onClick={toggleLogsModal}>Logs</button>
+                <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+                    <option value="javascript">JavaScript</option>
+                    <option value="c">C</option>
+                    <option value="java">Java</option>
+                    <option value="python">Python</option>
+                </select>
             </div>
             <textarea id="realtimeEditor"></textarea>
-            <div ref={outputRef} style={{ backgroundColor: '#f0f0f0', color: '#333', padding: '10px', minHeight: '100px', maxHeight: '200px', overflowY: 'auto' }}></div>
+            <div ref={outputRef} style={{ backgroundColor: '#f0f0f0', color: '#333', padding: '10px', minHeight: '100px', maxHeight: '200px', overflowY: 'auto' }}>{outputContent}</div>
         </div>
     );
 };
