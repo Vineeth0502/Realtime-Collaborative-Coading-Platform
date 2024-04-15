@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
-import 'codemirror/mode/htmlmixed/htmlmixed'; // Import HTML mixed mode
-import CodeMirror from 'codemirror'; // Import CodeMirror
+import 'codemirror/mode/htmlmixed/htmlmixed';
+import CodeMirror from 'codemirror';
 import ACTIONS from '../Actions';
 
 const Editor = ({ socketRef, roomId, onCodeChange }) => {
