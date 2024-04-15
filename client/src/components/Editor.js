@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
-import 'codemirror/mode/htmlmixed/htmlmixed';
+import 'codemirror/mode/htmlmixed/htmlmixed'; 
 import CodeMirror from 'codemirror';
 import ACTIONS from '../Actions';
 

@@ -37,11 +37,12 @@ const Home = () => {
 
   return(
    <div className="homePageWrapper" style={{backgroundColor: "#070f2b"}}>
-    <h2 className= "rubik-glitch" style={{position:"absolute",top:"0px",left:"360px", fontSize: "36px"}}>CN PROJECT</h2>
-    <img className='logo_contain' src='/work-together.jpg' style={{width: "850px"}}></img>
-    <div className="formWrapper" style={{backgroundColor: "#1b1a55",height: "510px"}}>
+    {/* <h2 className= "rubik-glitch" style={{position:"absolute",top:"0px",left:"120px", fontSize: "36px"}}>
+      Real  Time Collaborative Coding Editor</h2> */}
+    <img className='logo_contain' src='/pic.jpeg' style={{height: "400px", width: "600px", marginLeft: "105px",}}></img>
+    <div className="formWrapper" style={{backgroundColor: "lightsteelblue",height: "510px", marginRight: "50px"}}>
         <img className="homePageLogo" src="/logo-icon.png" style={{marginTop: "90px"}}></img>
-        <img className="homePageLogo" src="/codetogether.png"></img>
+        {/* <img className="homePageLogo" src="/codetogether.png"></img> */}
         <h4 className="mainLabel">Paste invitaiton ROOM ID</h4>
         <div className="inputGroup">
           <input 
@@ -63,7 +64,7 @@ const Home = () => {
           <buton className="btn joinBtn" onClick={joinRoom} style={{  width: "215px", marginLeft: "90px"}}>Join</buton>
           <span className="createInfo">
             If you don't have an invite then create &nbsp;
-            <a onClick={createNewRoom} href="" className="createNewBtn">
+            <a onClick={createNewRoom} href="">
               new room
             </a>
           </span>
