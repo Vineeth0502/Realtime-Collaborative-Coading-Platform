@@ -2,7 +2,7 @@
   "name": "real-editor",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@craco/craco": "^7.1.0",
     "@octokit/rest": "^20.1.0",
@@ -26,6 +26,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "dev": "nodemon --exec react-scripts start",
     "build": "react-scripts build"
   },
   "eslintConfig": {

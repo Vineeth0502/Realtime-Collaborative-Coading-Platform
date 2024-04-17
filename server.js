@@ -5,6 +5,7 @@ const path = require('path');
 const { Server } = require('socket.io');
 const ACTIONS = require('./Actions');
 
+// Creating a new Server connection.
 const server = http.createServer(app);
 const io = new Server(server);
 
@@ -29,6 +30,7 @@ function getAllConnectedClients(roomId) {
     );
 }
 
+// Getting all connected clients (usernames).
 io.on('connection', (socket) => {
     console.log('socket connected', socket.id);
 
@@ -53,6 +55,7 @@ io.on('connection', (socket) => {
         io.to(socketId).emit(ACTIONS.CODE_CHANGE, { code });
     });
 
+    //Disconnecting the clients.
     socket.on('disconnecting', () => {
         const rooms = [...socket.rooms];
         rooms.forEach((roomId) => {
@@ -66,5 +69,6 @@ io.on('connection', (socket) => {
     });
 });
 
-const PORT = process.env.PORT || 5000;
+//Adding a port for the server to listen to.
+const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));

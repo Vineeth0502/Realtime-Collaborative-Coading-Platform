@@ -1,6 +1,7 @@
 import React from 'react';
 import Avatar from 'react-avatar';
 
+//Creating the client with the username entered
 const Client = ({ username }) => {
     return (
         <div className="client">
