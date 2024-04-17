@@ -65,8 +65,14 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
 
             const frameDoc = frame.contentDocument || frame.contentWindow.document;
             frameDoc.open();
-            // frameDoc.write(codeToExecute);
-            frameDoc.write(eval(codeToExecute));
+            
+            if(codeToExecute[0]!= "<") {
+                frameDoc.write(eval(codeToExecute));
+            } else {
+                frameDoc.write(codeToExecute);
+            }
+            
+            
             frameDoc.close();
         } catch (error) {
             setOutputContent(`Error: ${error.message}`);
