@@ -7,6 +7,7 @@ import 'codemirror/mode/python/python';
 import CodeMirror from 'codemirror';
 import { Octokit } from '@octokit/rest'; // Import Octokit from @octokit/rest
 import ACTIONS from '../Actions';
+import { Buffer } from 'buffer';
 
 const Editor = ({ socketRef, roomId, onCodeChange }) => {
     const editorRef = useRef(null);
@@ -15,8 +16,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
     const [logs, setLogs] = useState([]);
     const [isLogsModalOpen, setIsLogsModalOpen] = useState(false);
     const [language, setLanguage] = useState('javascript');
-
-    const octokit = new Octokit(); // Initialize Octokit
+    
 
     useEffect(() => {
         if (editorRef.current) {
@@ -203,23 +203,20 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
     };
 
     const handlePushToGitHub = async () => {
-        const accessToken = prompt('Please enter your GitHub access token:');
+        const accessToken = prompt('Please enter your GitHub access token:'); // Prompt for access token
         if (!accessToken) return;
-
+    
         try {
-            octokit.authenticate({
-                type: 'token',
-                token: accessToken,
-            });
-
+            const octokit = new Octokit({ auth: accessToken }); 
+    
             const repoName = prompt('Please enter the repository name (username/repo):');
             if (!repoName) return;
-
+    
             const filePath = prompt('Please enter the file path (e.g., path/to/file.txt):');
             if (!filePath) return;
-
+    
             const codeToPush = editorRef.current.getValue();
-
+    
             const response = await octokit.repos.createOrUpdateFileContents({
                 owner: repoName.split('/')[0],
                 repo: repoName.split('/')[1],
@@ -227,7 +224,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
                 message: 'Pushing code from the application',
                 content: Buffer.from(codeToPush).toString('base64'),
             });
-
+    
             console.log('Code pushed successfully:', response.data);
             alert('Code pushed successfully to GitHub!');
         } catch (error) {
@@ -235,6 +232,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
             alert(`Error pushing code to GitHub: ${error.message}`);
         }
     };
+    
 
     return (
         <div style={{ padding: '10px', backgroundColor: '#f0f0f0', color: '#333', height: '100%', overflowY: 'auto' }}>

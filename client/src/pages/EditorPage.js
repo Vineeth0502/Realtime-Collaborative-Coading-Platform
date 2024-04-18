@@ -4,16 +4,11 @@ import ACTIONS from '../Actions';
 import Client from '../components/Client';
 import Editor from '../components/Editor';
 import { initSocket } from '../socket';
-import {
-    useLocation,
-    useNavigate,
-    Navigate,
-    useParams,
-} from 'react-router-dom';
+import { useLocation, useNavigate, Navigate, useParams } from 'react-router-dom';
 
 const EditorPage = () => {
     const socketRef = useRef(null);
-    const codeRef = useRef(null);
+    const codeRef = useRef(""); 
     const location = useLocation();
     const { roomId } = useParams();
     const reactNavigator = useNavigate();
@@ -86,6 +81,27 @@ const EditorPage = () => {
         reactNavigator('/');
     }
 
+    // const handlePush = async () => {
+    //     try {
+    //         const token = prompt('Enter your GitHub API token:');
+    //         if (token) {
+    //             // Authenticate user with GitHub using the API token
+    //             const accessToken = await authenticateUser(token);
+    
+    //             // Push code to GitHub
+    //             await pushCode(accessToken);
+    
+    //             toast.success('Code pushed successfully!');
+    //         } else {
+    //             toast.error('API token cannot be empty');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error pushing code to GitHub:', error);
+    //         toast.error('Failed to push code. Please try again.');
+    //     }
+    // };
+    
+
     if (!location.state) {
         return <Navigate to="/" />;
     }
@@ -124,6 +140,9 @@ const EditorPage = () => {
                 <button className="btn leaveBtn" onClick={leaveRoom}>
                     Leave
                 </button>
+                {/* <button className="btn pushBtn" onClick={handlePush}>
+                    Push
+                </button> */}
             </div>
             <div className="editorWrap">
                 <Editor
