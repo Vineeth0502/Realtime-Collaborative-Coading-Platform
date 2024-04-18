@@ -10,6 +10,7 @@ Methods: The implementation will involve utilizing advanced socket programming t
 time communication channels. The code editor component will be developed with features such as syntax
 highlighting and formatting. Additionally, collaborative debugging features, including breakpoints and variable
 inspection, will be incorporated to enhance the debugging process.
+
 INTRODUCTION 
  
 In today’s world where people work from different locations there’s a need for easy to use i.e., user- friendly and secure code editing tools, but it is difficult to find. The solutions which are already present are lacking productivity, with the requirements such as creating an account, having complicated sign-up procedures which needs time to be invested in and raising worries about data safety when the teams are far apart. Our team focuses on these issues to fix these problems by focusing on safety, ease to use and instant engagements. 
